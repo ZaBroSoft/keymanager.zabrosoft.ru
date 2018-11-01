@@ -10,6 +10,7 @@
                 <button class="btn btn-default" type="button" onclick="searchByNumberKey()">Найти</button>
             </span>
         </div><!-- /input-группа -->
+        <hr>
         <div id="result">
 
         </div>

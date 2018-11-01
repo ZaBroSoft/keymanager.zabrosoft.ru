@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Guest;
+use app\models\Key;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -20,10 +22,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'index', 'about', 'contact'],
+                'only' => ['logout', 'index', 'about', 'contact', 'getguests', 'search-by-key', 'search-by-name'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index', 'about', 'contact'],
+                        'actions' => ['logout', 'index', 'about', 'contact', 'getguests', 'search-by-key', 'search-by-name'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,7 +57,58 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+        ]);
+    }
+
+    public function actionSearchByKey()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (\Yii::$app->request->isAjax){
+
+            $number_key = \Yii::$app->request->post('num');
+            $key = Key::getKeyByNumber($number_key);
+
+            return [
+                'key_id' => $key->id,
+                'key_status' => $key->status
+            ];
+        }
+    }
+
+    public function actionSearchByName()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (\Yii::$app->request->isAjax){
+
+            $name = \Yii::$app->request->post('num');
+
+            $guest = Guest::getGuestByName($name);
+
+            return [
+                'guest' => $guest
+            ];
+        }
+    }
+
+    public function actionGetguests()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if (Yii::$app->request->isAjax){
+
+            $data = Yii::$app->request->post('data');
+
+            $index = 0;
+            $guests = [];
+            foreach (Guest::find()->select('name')->where(['like', 'name', $data])->orderBy('name')->all() as $guest){
+                $guests[$index++] = $guest->name;
+            }
+
+            return $guests;
+        }
     }
 
     /**

@@ -39,6 +39,9 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
+
+            Yii::$app->user->getId() == 100 ? ['label' => 'Администрирование', 'url' => ['/admin/index']] : '',
+
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
@@ -75,3 +78,4 @@ AppAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
+

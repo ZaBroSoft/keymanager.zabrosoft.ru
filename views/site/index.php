@@ -1,15 +1,33 @@
+<?php
+
+$this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
+$this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
+
+$script = <<< JS
+    $("#txt_number_key").autocomplete({
+        source: function(request, response){
+            $.post("getguests",{data:request.term}, function(data){     
+                response($.map(data, function(item) {
+                    return item;
+                }));
+            });     
+        }   
+    });
+JS;
+$this->registerJs($script, yii\web\View::POS_READY);
+?>
+
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h1 class="text-center">Найти</h1>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Введите номер брелка или фамилию" id="txt_number_key">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="searchByNumberKey()">Найти</button>
+            </span>
+        </div><!-- /input-группа -->
         <br>
-        <a href="<?= \yii\helpers\Url::to(['key/index']) ?>" class="btn btn-primary btn-block btn-lg">
-            Ключ
-        </a>
-        <br>
-        <a href="#" class="btn btn-primary btn-block btn-lg">
-            Гость
-        </a>
+        <div id="result"></div>
     </div>
     <div class="col-md-3"></div>
 </div>
