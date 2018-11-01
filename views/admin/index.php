@@ -10,9 +10,8 @@ $this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <div class="btn-group btn-block btn-group-lg">
-            <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class="btn btn-default btn-block">Добавить гостя</a>
-        </div>
+        <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class="btn btn-default btn-block btn-lg">Добавить гостя</a>
+        <a href="<?= \yii\helpers\Url::to(['give-key']) ?>" class="btn btn-default btn-block btn-lg">Выдать брелок</a>
     </div>
     <div class="col-md-3"></div>
 </div>

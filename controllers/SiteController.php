@@ -88,7 +88,8 @@ class SiteController extends Controller
             $guest = Guest::getGuestByName($name);
 
             return [
-                'guest' => $guest
+                'guest' => $guest,
+                'keys_count' => $guest->getKeys()->count(),
             ];
         }
     }

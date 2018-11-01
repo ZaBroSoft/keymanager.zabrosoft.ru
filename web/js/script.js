@@ -14,11 +14,12 @@ function searchByNumberKey(){
                         '</div>');
                 }else {
                     $('#result').html('' +
-                        '<div class="panel">' +
+                        '<div class="panel panel-success">' +
+                        '   <div class="panel-heading"><h4>'+ data.guest.name +'</h4></div>' +
                         '   <div class="panel-body">' +
-                        '       <h3 class="text-center">'+ data.guest.name +'</h3>' +
-                        '       <br>' +
+                        '       <h4>Должность:</h4>' +
                         '       <div class="well">'+ data.guest.post +'</div>' +
+                        '       <h4>Ключи: <span class="badge">'+ data.keys_count +'</span></h4>' +
                         '   </div>' +
                         '</div>');
                 }

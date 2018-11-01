@@ -49,4 +49,10 @@ class Guest extends \yii\db\ActiveRecord
     {
         return Guest::find()->where(['name'=>$name])->one();
     }
+
+    public function getKeys()
+    {
+        return $this->hasMany(Key::className(), ['id' => 'guest_id'])
+            ->viaTable('guest_key', ['key_id' => 'id']);
+    }
 }
