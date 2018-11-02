@@ -80,10 +80,16 @@ function giveKey() {
 
     var name = document.getElementById('txt_name').value;
 
+    var post = '';
+
+    if ($("#ch_newGuest").is(':checked')){
+        post = document.getElementById('txt_post').value;
+    }
+
     $.ajax({
         url: 'give-key',
         type: 'post',
-        data: {number: number, name: name},
+        data: {number: number, name: name, post: post},
         success: function (data) {
             if (data.status == 'Not guest'){
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Не найдено.</b> Гость не зарегестрирован</div>')
@@ -96,6 +102,9 @@ function giveKey() {
             }
             if (data.status == 'Key not free'){
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Ключ уже выдан <b>'+ data.guest.name +'</b></div>')
+            }
+            if (data.status == 'Already guest'){
+                $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Гость уже зарегестрирован <b>'+ data.guest.name +'</b></div>')
             }
         }
     });

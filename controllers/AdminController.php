@@ -64,8 +64,26 @@ class AdminController extends \yii\web\Controller
 
             $number = Yii::$app->request->post('number');
             $name = Yii::$app->request->post('name');
+            $post = Yii::$app->request->post('post');
 
-            $guest = Guest::findOne(['name' => $name]);
+            $guest = null;
+
+            if ($post != ''){
+                if (Guest::findOne(['name' => $name]) == null){
+                    $guest = new Guest();
+                    $guest->name = $name;
+                    $guest->post = $post;
+                    $guest->save();
+                }else{
+                    return [
+                        'status' => 'Already guest'
+                    ];
+                }
+
+            }else{
+                $guest = Guest::findOne(['name' => $name]);
+            }
+
             $key = Key::findOne(['number' => $number]);
 
             if ($guest == null){
