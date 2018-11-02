@@ -52,7 +52,7 @@ class Guest extends \yii\db\ActiveRecord
 
     public function getKeysArray()
     {
-        $guestKeys = GuestKey::find(['guest_id' => $this->id])->all();
+        $guestKeys = GuestKey::find()->where(['guest_id' => $this->id])->all();
         $keys = [];
         $i = 0;
         foreach ($guestKeys as $guestKey){
