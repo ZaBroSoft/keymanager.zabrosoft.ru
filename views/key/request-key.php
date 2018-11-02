@@ -54,7 +54,7 @@ $this->registerJs($script, yii\web\View::POS_READY);
             <br>
 
             <div class="row">
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-7 col-xs-7">
                     <h4>Тип ключа:</h4>
                     <div class="checkbox">
                         <label><input type="checkbox" value="">Карта ( Белая )</label>
@@ -63,16 +63,16 @@ $this->registerJs($script, yii\web\View::POS_READY);
                         <label><input type="checkbox" value="">Брелок (синий)</label>
                     </div>
                     <div class="checkbox">
-                        <label><input type="checkbox" value="">Брелок ( 17/18 - 70 лет )</label>
+                        <label><input type="checkbox" value="">Брелок (17/18 - 70 лет)</label>
                     </div>
                     <div class="checkbox">
-                        <label><input type="checkbox" value="">Брелок ( 18/19 - черный )</label>
+                        <label><input type="checkbox" value="">Брелок (18/19 - черный)</label>
                     </div>
                     <div class="checkbox">
                         <label><input type="checkbox" value="">Браслет</label>
                     </div>
                 </div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-5 col-xs-5">
                     <h4>Доступ:</h4>
                     <div class="checkbox">
                         <label><input type="checkbox" value="">Максимум</label>
