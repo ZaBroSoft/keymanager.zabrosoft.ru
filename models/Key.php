@@ -54,4 +54,10 @@ class Key extends \yii\db\ActiveRecord
     {
         return Key::find()->where(['number'=>$number])->one();
     }
+
+    public function getGuest()
+    {
+        $guestKey = GuestKey::findOne(['key_id' => $this->id]);
+        return $guestKey != null ? $guestKey->guest : null;
+    }
 }

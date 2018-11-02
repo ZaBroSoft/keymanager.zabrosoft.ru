@@ -6,7 +6,7 @@ $this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes
 $script = <<< JS
     $("#txt_number_key").autocomplete({
         source: function(request, response){
-            $.post("getguests",{data:request.term}, function(data){     
+            $.post("site/getguests",{data:request.term}, function(data){     
                 response($.map(data, function(item) {
                     return item;
                 }));
