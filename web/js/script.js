@@ -42,7 +42,7 @@ function searchByNumberKey(){
         success: function (data) {
             if (data.key_status == 40){
                 $('#result').html('<div class="alert alert-info" role="alert"><b>На складе.</b> ' +
-                    'Данный брелок находится у маркетолога</div>');
+                    'Данный брелок находится у маркетолога</div>' + addRequestButton());
             }
             if (data.key_status == 0) {
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка.</b> ' +
@@ -68,6 +68,16 @@ function searchByNumberKey(){
             }
         }
     });
+}
+
+function addRequestButton() {
+    var text = '<div class="text-right">' +
+        '           <div class="btn-group">' +
+        '               <a href="key/request-key" class="btn btn-primary">Заявка</a>' +
+        '           </div>'
+        '       </div>';
+
+    return text;
 }
 
 function giveKey() {
@@ -112,4 +122,34 @@ function giveKey() {
             document.getElementById('txt_post').value = '';
         }
     });
+}
+
+function btnSendRequest_Click() {
+
+    var name = document.getElementById('txt_name').value;
+
+    if (name == '') return;
+
+    $.post("../site/search-by-name", {num: name}, function(data) {
+        if (data.guest == null) {
+            $('.bd-example-modal-sm').modal('show');
+        }else{
+
+        }
+    });
+}
+
+function txt_name_onBlur() {
+    var name = document.getElementById('txt_name').value;
+    if (name == ''){
+        return;
+    }
+    if ($("#post").hasClass('hidden')) {
+        $.post("../site/search-by-name", {num: name}, function(data) {
+            if (data.guest != null) {
+                $("#guest_post").html(data.guest.post);
+                $("#post").removeClass('hidden');
+            }
+        });
+    }
 }

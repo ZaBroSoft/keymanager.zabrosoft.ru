@@ -105,6 +105,13 @@ class SiteController extends Controller
             $name = \Yii::$app->request->post('num');
 
             $guest = Guest::getGuestByName($name);
+
+            if ($guest == null){
+                return [
+                    'guest' => $guest,
+                ];
+            }
+
             $key_count = $guest == null ? 0 : count($guest->keysArray);
 
             return [

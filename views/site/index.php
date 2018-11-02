@@ -24,7 +24,9 @@ $this->registerJs($script, yii\web\View::POS_READY);
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Введите номер брелка или фамилию" id="txt_number_key">
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="searchByNumberKey()">Найти</button>
+                <button class="btn btn-default" type="button" onclick="searchByNumberKey()">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
             </span>
         </div><!-- /input-группа -->
         <br>

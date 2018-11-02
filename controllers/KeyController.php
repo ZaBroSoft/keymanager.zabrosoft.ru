@@ -15,7 +15,7 @@ class KeyController extends \yii\web\Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'search-by-key'],
+                        'actions' => ['index', 'search-by-key', 'request-key'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -43,5 +43,10 @@ class KeyController extends \yii\web\Controller
                 'key_status' => $key->status
             ];
         }
+    }
+
+    public function actionRequestKey()
+    {
+        return $this->render('request-key');
     }
 }
