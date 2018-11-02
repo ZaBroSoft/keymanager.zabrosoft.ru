@@ -70,9 +70,21 @@ class SiteController extends Controller
             $number_key = \Yii::$app->request->post('num');
             $key = Key::getKeyByNumber($number_key);
 
+            if ($key == null){
+                return [
+                    'key_status' => 0
+                ];
+            }
+
+            $guest = Guest::getGuestByName($key->guest->name);
+            $key_count = $guest == null ? 0 : count($guest->keysArray);
+
             return [
                 'key_id' => $key->id,
-                'key_status' => $key->status
+                'key_status' => $key->status,
+                'keys_count' => $key_count,
+                'guest' => $guest,
+                'keys' => $guest->keysArray,
             ];
         }
     }
@@ -86,10 +98,12 @@ class SiteController extends Controller
             $name = \Yii::$app->request->post('num');
 
             $guest = Guest::getGuestByName($name);
+            $key_count = $guest == null ? 0 : count($guest->keysArray);
 
             return [
                 'guest' => $guest,
-                'keys_count' => $guest->getKeys()->count(),
+                'keys_count' => $key_count,
+                'keys' => $guest->keysArray,
             ];
         }
     }

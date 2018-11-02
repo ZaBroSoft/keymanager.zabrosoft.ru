@@ -50,9 +50,14 @@ class Guest extends \yii\db\ActiveRecord
         return Guest::find()->where(['name'=>$name])->one();
     }
 
-    public function getKeys()
+    public function getKeysArray()
     {
-        return $this->hasMany(Key::className(), ['id' => 'guest_id'])
-            ->viaTable('guest_key', ['key_id' => 'id']);
+        $guestKeys = GuestKey::find(['guest_id' => $this->id])->all();
+        $keys = [];
+        $i = 0;
+        foreach ($guestKeys as $guestKey){
+            $keys[$i++] = $guestKey->key;
+        }
+        return $keys;
     }
 }

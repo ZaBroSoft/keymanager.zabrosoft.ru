@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\GiveKeyForm;
 use app\models\Guest;
+use app\models\GuestKey;
+use app\models\Key;
 use app\models\NewGuestForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -57,6 +59,48 @@ class AdminController extends \yii\web\Controller
 
     public function actionGiveKey()
     {
+        if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $number = Yii::$app->request->post('number');
+            $name = Yii::$app->request->post('name');
+
+            $guest = Guest::findOne(['name' => $name]);
+            $key = Key::findOne(['number' => $number]);
+
+            if ($guest == null){
+                return [
+                    'status' => 'Not guest'
+                ];
+            }
+
+            if ($key == null){
+                return [
+                    'status' => 'Not key'
+                ];
+            }
+
+            if ($key->guest != null){
+                return [
+                    'status' => 'Key not free',
+                    'guest' => $key->guest
+                ];
+            }
+
+            $guest_key = new GuestKey();
+            $guest_key->guest_id = $guest->id;
+            $guest_key->key_id = $key->id;
+            $guest_key->date = date('Y-m-d');
+            $guest_key->save();
+
+            $key->status = Key::STATUS_ISSUED;
+            $key->save();
+
+            return [
+                'status' => 'OK'
+            ];
+        }
+
 
         return $this->render('give', [
         ]);
