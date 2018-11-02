@@ -8,6 +8,7 @@
 namespace app\commands;
 
 use app\models\Key;
+use Yii;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -42,5 +43,16 @@ class HelloController extends Controller
             $key->save();
         }
         echo 'Done'.PHP_EOL;
+    }
+
+    public function actionSendMail()
+    {
+        Yii::$app->mailer->compose()
+            ->setFrom(['zaikinnv@mail.ru' => 'Письмо с сайта'])
+            ->setTo('zaikinnv@mail.ru')
+            ->setSubject('Тема сообщения')
+            ->setTextBody('Текст сообщения')
+            ->setHtmlBody('<b>текст сообщения в формате HTML</b>')
+            ->send();
     }
 }

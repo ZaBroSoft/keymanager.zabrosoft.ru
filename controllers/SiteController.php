@@ -76,6 +76,13 @@ class SiteController extends Controller
                 ];
             }
 
+            if ($key->guest == null){
+                return [
+                    'key_id' => $key->id,
+                    'key_status' => $key->status,
+                ];
+            }
+
             $guest = Guest::getGuestByName($key->guest->name);
             $key_count = $guest == null ? 0 : count($guest->keysArray);
 

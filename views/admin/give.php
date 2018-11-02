@@ -38,6 +38,15 @@ $this->registerJs($script, yii\web\View::POS_READY);
                    aria-describedby="basic-addon1" id="txt_name">
         </div>
         <br>
+        <h4>Должность:</h4>
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon" id="basic-addon1">
+                <input type="checkbox" aria-label="" id="ch_newGuest">
+            </span>
+            <input type="textarea" class="form-control" placeholder="Введите должность"
+                   aria-describedby="basic-addon1" id="txt_post">
+        </div>
+        <br>
         <button type="button" class="btn btn-primary btn-block btn-lg" onclick="giveKey()">Выдать</button>
     </div>
     <div class="col-md-3"></div>
