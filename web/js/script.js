@@ -104,8 +104,12 @@ function giveKey() {
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Ключ уже выдан <b>'+ data.guest.name +'</b></div>')
             }
             if (data.status == 'Already guest'){
-                $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Гость уже зарегестрирован <b>'+ data.guest.name +'</b></div>')
+                $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Гость уже зарегестрирован</div>')
             }
+
+            document.getElementById('txt_number_key').value = '';
+            document.getElementById('txt_name').value = '';
+            document.getElementById('txt_post').value = '';
         }
     });
 }
