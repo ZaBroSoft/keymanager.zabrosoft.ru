@@ -20,7 +20,20 @@ function searchByNumberKey(){
                     }
                     $('#result').html('' +
                         '<div class="panel panel-success">' +
-                        '   <div class="panel-heading"><h4>'+ data.guest.name +'</h4></div>' +
+                        '   <div class="panel-heading">' +
+
+                        '       <div class="row">' +
+                        '           <div class="col-md-8 col-xs-8">' +
+                        '               <h4>'+ data.guest.name +'</h4>' +
+                        '           </div>' +
+                        '           <div class="col-md-4 col-xs-4 text-right">' +
+                        '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
+                        '                   class="btn btn-primary">' +
+                        '                   <i class="glyphicon glyphicon-plus"></i>' +
+                        '               </a>' +
+                        '           </div>   ' +
+                        '       </div>' +
+                        '   </div>' +
                         '   <div class="panel-body">' +
                         '       <h4>Должность:</h4>' +
                         '       <div class="well">'+ data.guest.post +'</div>' +
@@ -55,7 +68,9 @@ function searchByNumberKey(){
                 }
                 $('#result').html('' +
                     '<div class="panel panel-success">' +
-                    '   <div class="panel-heading"><h4>'+ data.guest.name +'</h4></div>' +
+                    '   <div class="panel-heading">' +
+                    '       <h4>'+ data.guest.name +'</h4>' +
+                    '   </div>' +
                     '   <div class="panel-body">' +
                     '       <h4>Должность:</h4>' +
                     '       <div class="well">'+ data.guest.post +'</div>' +
@@ -66,14 +81,20 @@ function searchByNumberKey(){
                     '   </div>' +
                     '</div>');
             }
+            if (data.key_status == 10) {
+                $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
+                    'Данный брелок находится у техника СКД</div>' + addRequestButton());
+            }
         }
     });
 }
 
 function addRequestButton() {
+    var number = +document.getElementById("txt_number_key").value;
     var text = '<div class="text-right">' +
         '           <div class="btn-group">' +
-        '               <a href="key/request-key" class="btn btn-primary">Заявка</a>' +
+        '               <a href="key/request-key?number='+ number +'&name=null" ' +
+        '                   class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>' +
         '           </div>'
         '       </div>';
 
@@ -152,4 +173,20 @@ function txt_name_onBlur() {
             }
         });
     }
+}
+
+function add_free_key() {
+    var key = +document.getElementById("free_key").value;
+    document.location.href = "add-free-key?key=" + key;
+}
+
+function getFreeKey() {
+    $.ajax({
+        url: '../key/get-free-key',
+        type: 'post',
+        success: function (data) {
+            document.getElementById("txt_number_key").value = data.key.number;
+            searchByNumberKey();
+        }
+    });
 }

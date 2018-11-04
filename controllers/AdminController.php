@@ -8,6 +8,7 @@ use app\models\GuestKey;
 use app\models\Key;
 use app\models\NewGuestForm;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 
 class AdminController extends \yii\web\Controller
@@ -20,7 +21,7 @@ class AdminController extends \yii\web\Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'addguest', 'give-key', 'getguests'],
+                        'actions' => ['index', 'addguest', 'give-key', 'getguests', 'free-key', 'add-free-key'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function (){
@@ -144,4 +145,36 @@ class AdminController extends \yii\web\Controller
         }
     }
 
+    public function actionFreeKey()
+    {
+        $keys = Key::find()->where(['status' => Key::STATUS_FREE]);
+
+        $countKeys = clone $keys;
+        $pages = new Pagination(['totalCount' => $countKeys->count(), 'pageSize' => 5]);
+        $models = $keys->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        $nextKey = Yii::$app->request->get('next_key');
+
+        return $this->render('free-key', [
+            'models' => $models,
+            'pages' => $pages,
+            'nextKey' => $nextKey,
+            'keyCount' => $countKeys->count()
+        ]);
+    }
+
+    public function actionAddFreeKey($key)
+    {
+        if ($key == '' || $key == 'NaN' || $key == 0){
+            return $this->redirect('free-key');
+        }
+
+        $model = Key::findOne(['number' => $key]);
+        $model->status = Key::STATUS_FREE;
+        $model->save();
+
+        return $this->redirect(['free-key', 'next_key' => $model->number + 1]);
+    }
 }

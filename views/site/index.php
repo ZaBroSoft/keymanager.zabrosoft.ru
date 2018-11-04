@@ -11,7 +11,11 @@ $script = <<< JS
                     return item;
                 }));
             });     
-        }   
+        },
+        minLength: 3,
+        close: function(){
+            searchByNumberKey();
+        }        
     });
 JS;
 $this->registerJs($script, yii\web\View::POS_READY);
@@ -22,6 +26,11 @@ $this->registerJs($script, yii\web\View::POS_READY);
     <div class="col-md-6">
         <h3>Поиск:</h3>
         <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="getFreeKey()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </span>
             <input type="text" class="form-control" placeholder="Введите номер брелка или фамилию" id="txt_number_key">
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button" onclick="searchByNumberKey()">
