@@ -86,19 +86,19 @@ $this->registerJs($script, yii\web\View::POS_READY);
                 <div class="col-md-5 col-xs-5">
                     <h4>Доступ:</h4>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Максимум</label>
+                            <label><input type="radio" name="optradio1">Максимум</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">М - штаб</label>
+                            <label><input type="radio" name="optradio1">М - штаб</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">М - Трактор</label>
+                            <label><input type="radio" name="optradio1">М - Трактор</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio" checked>Осн.</label>
+                            <label><input type="radio" name="optradio1" checked>Осн.</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio">Осн. + ложи</label>
+                            <label><input type="radio" name="optradio1">Осн. + ложи</label>
                         </div>
                         <div class="checkbox">
                             <label><input type="checkbox">VIP</label>
