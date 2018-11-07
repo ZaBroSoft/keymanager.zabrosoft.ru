@@ -109,7 +109,7 @@ function addRequestButton() {
     var name = document.getElementById("txt_number_key").value;
     var text = '<div class="text-right">' +
         '           <div class="btn-group">' +
-        '               <a href="key/request-key?number='+ number +'&name='+ (!isFinite(number) ? name : 'sss') +'" ' +
+        '               <a href="key/request-key?number='+ number +'&name='+ (!isFinite(number) ? name : '') +'" ' +
         '                   class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>' +
         '           </div>'
         '       </div>';
