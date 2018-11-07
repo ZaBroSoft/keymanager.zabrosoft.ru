@@ -10,9 +10,44 @@ $this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class="btn btn-default btn-block btn-lg">Добавить гостя</a>
-        <a href="<?= \yii\helpers\Url::to(['give-key']) ?>" class="btn btn-default btn-block btn-lg">Выдать брелок</a>
-        <a href="<?= \yii\helpers\Url::to(['free-key']) ?>" class="btn btn-default btn-block btn-lg">Свободные брелки</a>
+        <div class="list-group">
+            <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class="btn btn-default list-group-item">
+                <div class="row">
+                    <dic class="col-md-10 col-xs-10">
+                        Добавить гостя
+                    </dic>
+                    <dic class="col-md-2 col-xs-2 text-right"></dic>
+                </div>
+            </a>
+            <a href="<?= \yii\helpers\Url::to(['give-key']) ?>" class="btn btn-default list-group-item">
+                <div class="row">
+                    <dic class="col-md-10 col-xs-10">
+                        Выдать брелок
+                    </dic>
+                    <dic class="col-md-2 col-xs-2 text-right"></dic>
+                </div>
+            </a>
+            <a href="<?= \yii\helpers\Url::to(['free-key']) ?>" class="btn btn-default list-group-item">
+                <div class="row">
+                    <dic class="col-md-10 col-xs-10">
+                        Свободные брелки
+                    </dic>
+                    <dic class="col-md-2 col-xs-2 text-right">
+                        <div class="badge"><?= $freeKeys ?></div>
+                    </dic>
+                </div>
+            </a>
+            <a href="<?= \yii\helpers\Url::to(['list-request']) ?>" class="btn btn-default list-group-item <?= $requestCount > 0 ? 'list-group-item-danger' : '' ?>">
+                <div class="row">
+                    <dic class="col-md-10 col-xs-10">
+                        Заявки
+                    </dic>
+                    <dic class="col-md-2 col-xs-2 text-right">
+                        <div class="badge"><?= $requestCount ?></div>
+                    </dic>
+                </div>
+            </a>
+        </div>
     </div>
     <div class="col-md-3"></div>
 </div>

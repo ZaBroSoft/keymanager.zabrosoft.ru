@@ -24,12 +24,11 @@ $this->registerJs($script, yii\web\View::POS_READY);
 <div class="row">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <h3>Поиск:</h3>
         <div class="input-group">
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="getFreeKey()">
+                <a href="<?= \yii\helpers\Url::to(['../key/request-key', 'number'=>'NaN', 'name'=>'']) ?>" class="btn btn-default" type="button">
                     <i class="glyphicon glyphicon-plus"></i>
-                </button>
+                </a>
             </span>
             <input type="text" class="form-control" placeholder="Введите номер брелка или фамилию" id="txt_number_key">
             <span class="input-group-btn">
@@ -40,6 +39,52 @@ $this->registerJs($script, yii\web\View::POS_READY);
         </div><!-- /input-группа -->
         <br>
         <div id="result"></div>
+
+        <br>
+        Мои заявки:<br>
+        <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <td>ID</td>
+                <td>Дата</td>
+                <td>Гость</td>
+                <td>Тип ключа</td>
+                <td>Статус</td>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($requests as $request): ?>
+                <tr class="<?php
+                    switch ($request->status){
+                        case \app\models\Request::STATUS_SENDED:
+                            echo 'info';
+                            break;
+                        case \app\models\Request::STATUS_DONE:
+                            echo 'success';
+                            break;
+                        case \app\models\Request::STATUS_CANCELED:
+                            echo 'danger';
+                            break;
+                        default:
+                            echo 'active';
+                            break;
+                    }
+                ?>">
+                <td><?= $request->id ?></td>
+                <td><?= $request->date ?></td>
+                <td><?= $request->name ?></td>
+                <td><?= $request->typeName ?></td>
+                <td><?= $request->statusName ?></td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <?php
+        echo \yii\widgets\LinkPager::widget([
+            'pagination' => $pages
+        ]);
+        ?>
     </div>
     <div class="col-md-3"></div>
 </div>

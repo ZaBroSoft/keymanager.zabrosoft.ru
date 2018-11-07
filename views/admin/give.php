@@ -12,7 +12,8 @@ $script = <<< JS
                     return item.name;
                 }));
             });     
-        }   
+        },
+        minLength: 3,   
     });
 JS;
 $this->registerJs($script, yii\web\View::POS_READY);

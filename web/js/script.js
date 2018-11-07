@@ -12,7 +12,7 @@ function searchByNumberKey(){
                         '   <div class="alert alert-info" role="alert">' +
                         '   <b>Не найден.</b> ' +
                         '   Гость еще не зарегестрирован' +
-                        '</div>');
+                        '</div>' + addRequestButton());
                 }else {
                     var keys = '';
                     for(var i = 0; i < data.keys_count; i++){
@@ -33,6 +33,7 @@ function searchByNumberKey(){
                         '               </a>' +
                         '           </div>   ' +
                         '       </div>' +
+
                         '   </div>' +
                         '   <div class="panel-body">' +
                         '       <h4>Должность:</h4>' +
@@ -69,7 +70,17 @@ function searchByNumberKey(){
                 $('#result').html('' +
                     '<div class="panel panel-success">' +
                     '   <div class="panel-heading">' +
-                    '       <h4>'+ data.guest.name +'</h4>' +
+                    '       <div class="row">' +
+                    '           <div class="col-md-8 col-xs-8">' +
+                    '               <h4>'+ data.guest.name +'</h4>' +
+                    '           </div>' +
+                    '           <div class="col-md-4 col-xs-4 text-right">' +
+                    '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
+                    '                   class="btn btn-primary">' +
+                    '                   <i class="glyphicon glyphicon-plus"></i>' +
+                    '               </a>' +
+                    '           </div>   ' +
+                    '       </div>' +
                     '   </div>' +
                     '   <div class="panel-body">' +
                     '       <h4>Должность:</h4>' +
@@ -85,15 +96,20 @@ function searchByNumberKey(){
                 $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
                     'Данный брелок находится у техника СКД</div>' + addRequestButton());
             }
+            if (data.key_status == 50) {
+                $('#result').html('<div class="alert alert-warning" role="alert"><b>Занят.</b> ' +
+                    'Данный брелок находится в заявке на выдачу</div>');
+            }
         }
     });
 }
 
 function addRequestButton() {
     var number = +document.getElementById("txt_number_key").value;
+    var name = document.getElementById("txt_number_key").value;
     var text = '<div class="text-right">' +
         '           <div class="btn-group">' +
-        '               <a href="key/request-key?number='+ number +'&name=null" ' +
+        '               <a href="key/request-key?number='+ number +'&name='+ (!isFinite(number) ? name : 'sss') +'" ' +
         '                   class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i></a>' +
         '           </div>'
         '       </div>';
@@ -138,8 +154,7 @@ function giveKey() {
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка</b> Гость уже зарегестрирован</div>')
             }
 
-            document.getElementById('txt_number_key').value = '';
-            document.getElementById('txt_name').value = '';
+            document.getElementById('txt_number_key').value = data.nextKey;
             document.getElementById('txt_post').value = '';
         }
     });
@@ -148,16 +163,82 @@ function giveKey() {
 function btnSendRequest_Click() {
 
     var name = document.getElementById('txt_name').value;
+    var number = +document.getElementById('txt_number_key').value;
 
     if (name == '') return;
 
-    $.post("../site/search-by-name", {num: name}, function(data) {
-        if (data.guest == null) {
-            $('.bd-example-modal-sm').modal('show');
-        }else{
+    if (!$("#ch_bracelet").is(':checked')){
+        if (number == 0 || !isFinite(number)) {
+            alert('Номер не может быть пустым или нулем!');
+            return;
+        }
+    }
 
+    var type = 0;
+
+    if ($("#type_0").is(':checked')){
+        type = 0;
+    }else if ($("#type_1").is(':checked')) {
+        type = 10;
+    }else if ($("#type_2").is(':checked')) {
+        type = 20;
+    }else if ($("#type_3").is(':checked')) {
+        type = 30;
+    }else if ($("#type_4").is(':checked')) {
+        type = 40;
+    }
+
+    var bracelet = $("#ch_bracelet").is(':checked') ? '10' : 0;
+
+    var access = 0;
+
+    if ($("#access_0").is(':checked')){
+        access = 0;
+    }else if ($("#access_1").is(':checked')) {
+        access = 10;
+    }else if ($("#access_2").is(':checked')) {
+        access = 20;
+    }else if ($("#access_3").is(':checked')) {
+        access = 30;
+    }else if ($("#access_4").is(':checked')) {
+        access = 40;
+    }
+
+    var vip = $("#ch_vip").is(':checked') ? '10' : 0;
+
+    var other = document.getElementById("comment").value;
+
+    var post = document.getElementById("modal_txt_post").value;
+
+    $.post("../site/search-by-name", {num: name}, function(data) {
+        if (data.guest == null && post == '') {
+            $('.bd-example-modal-sm').modal('show');
+            document.getElementById("modal_txt_post").value = 'Без должности';
+        }else{
+            $.post("../key/add-request",
+                {
+                    number: number,
+                    name: name,
+                    post: post,
+                    type: type,
+                    bracelet: bracelet,
+                    access: access,
+                    vip: vip,
+                    other: other
+                },
+                function (data) {
+                    $("#request_content").html('');
+                    $('#request_content').html('<div class="alert alert-success" role="alert"><b>Готово.</b> Заявка #'+ data.request_number +' отправлена</div>')
+                }
+            );
         }
     });
+
+}
+
+function modal_sendRequest() {
+    $('.bd-example-modal-sm').modal('hide');
+    btnSendRequest_Click();
 }
 
 function txt_name_onBlur() {
@@ -189,4 +270,20 @@ function getFreeKey() {
             searchByNumberKey();
         }
     });
+}
+
+function addGuest(req_id) {
+    var name = document.getElementById('txt_request_name').value;
+    var post = document.getElementById('txt_request_post').value;
+
+    $.post("../admin/addguest",
+        {
+            name: name,
+            post: post,
+            request_id: req_id
+        },
+        function (data) {
+
+        }
+    );
 }

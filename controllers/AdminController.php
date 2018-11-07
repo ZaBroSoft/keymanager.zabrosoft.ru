@@ -7,9 +7,11 @@ use app\models\Guest;
 use app\models\GuestKey;
 use app\models\Key;
 use app\models\NewGuestForm;
+use app\models\Request;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
+use yii\helpers\Html;
 
 class AdminController extends \yii\web\Controller
 {
@@ -21,7 +23,8 @@ class AdminController extends \yii\web\Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'addguest', 'give-key', 'getguests', 'free-key', 'add-free-key'],
+                        'actions' => ['index', 'addguest', 'give-key', 'getguests', 'free-key', 'add-free-key',
+                            'request-view', 'list-request', 'change-status'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function (){
@@ -35,8 +38,13 @@ class AdminController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        return $this->render('index', [
 
+        $freeKeys = Key::find()->where(['status' => Key::STATUS_FREE])->count();
+        $requestcount = Request::find()->where(['status'=>Request::STATUS_SENDED])->count();
+
+        return $this->render('index', [
+            'freeKeys' => $freeKeys,
+            'requestCount' => $requestcount
         ]);
     }
 
@@ -50,6 +58,23 @@ class AdminController extends \yii\web\Controller
                 'guest' => $model,
                 'info' => 'add guest'
             ]);
+        }
+
+        if (Yii::$app->request->isAjax){
+            $req = Request::findOne(Html::encode(Yii::$app->request->post('request_id')));
+
+            $guest = new Guest();
+            $guest->name = Html::encode(Yii::$app->request->post('name'));
+            $guest->post = Html::encode(Yii::$app->request->post('post'));
+            $guest->save();
+
+            $req->link('guest', $guest);
+            $req->name = $guest->name;
+            $req->post = $guest->post;
+
+            $req->save();
+
+            return $this->redirect(['request-view', 'id' => $req->id]);
         }
 
         return $this->render('addguest',
@@ -77,7 +102,8 @@ class AdminController extends \yii\web\Controller
                     $guest->save();
                 }else{
                     return [
-                        'status' => 'Already guest'
+                        'status' => 'Already guest',
+                        'nextKey' => $number,
                     ];
                 }
 
@@ -89,20 +115,23 @@ class AdminController extends \yii\web\Controller
 
             if ($guest == null){
                 return [
-                    'status' => 'Not guest'
+                    'status' => 'Not guest',
+                    'nextKey' => $number,
                 ];
             }
 
             if ($key == null){
                 return [
-                    'status' => 'Not key'
+                    'status' => 'Not key',
+                    'nextKey' => $number,
                 ];
             }
 
             if ($key->guest != null){
                 return [
                     'status' => 'Key not free',
-                    'guest' => $key->guest
+                    'guest' => $key->guest,
+                    'nextKey' => $number,
                 ];
             }
 
@@ -116,7 +145,8 @@ class AdminController extends \yii\web\Controller
             $key->save();
 
             return [
-                'status' => 'OK'
+                'status' => 'OK',
+                'nextKey' => $number + 1,
             ];
         }
 
@@ -176,5 +206,78 @@ class AdminController extends \yii\web\Controller
         $model->save();
 
         return $this->redirect(['free-key', 'next_key' => $model->number + 1]);
+    }
+
+    public function actionRequestView($id)
+    {
+        $req = Request::findOne($id);
+        return $this->render('request-view', [
+            'request' => $req
+        ]);
+    }
+
+    public function actionListRequest()
+    {
+        $list = Request::find()->orderBy(['(id)' => SORT_DESC]);
+
+        $listCount = clone $list;
+        $pages = new Pagination(['totalCount' => $listCount->count(), 'pageSize' => 15]);
+        $models = $list->offset($pages->offset)->limit($pages->limit)->all();
+
+        return $this->render('list-request', [
+            'models' => $models,
+            'pages' => $pages
+        ]);
+    }
+
+    public function actionChangeStatus($id, $status)
+    {
+        $req = Request::findOne($id);
+        switch ($status){
+            case Request::STATUS_ISJOB:
+                $req->status = Request::STATUS_ISJOB;
+                break;
+            case Request::STATUS_READY:
+                $req->status = Request::STATUS_READY;
+                break;
+            case Request::STATUS_DONE:
+                $req->status = Request::STATUS_DONE;
+
+                if ($req->guest == null){
+                    return $this->redirect(['request-view', 'id' => $id]);
+                }
+
+                if ($req->key != null){
+                    $key = Key::findOne($req->key->id);
+                    $guest = Guest::findOne($req->guest->id);
+
+                    $guestKey = new GuestKey();
+                    $guestKey->key_id = $key->id;
+                    $guestKey->guest_id = $guest->id;
+                    $guestKey->date = date('Y-m-d');
+                    $guestKey->save();
+                }
+
+                $req->save();
+
+                return $this->redirect(['request-view', 'id' => $id]);
+
+                break;
+            case Request::STATUS_CANCELED:
+                $req->status = Request::STATUS_CANCELED;
+                if ($req->key != null){
+                    $key = Key::findOne($req->key->id);
+                    $key->status = $key->old_status;
+                    $key->old_status = null;
+                    $key->save();
+                }
+
+                $req->save();
+                return $this->redirect(['list-request']);
+                break;
+        }
+        $req->save();
+
+        return $this->redirect(['request-view', 'id' => $id]);
     }
 }

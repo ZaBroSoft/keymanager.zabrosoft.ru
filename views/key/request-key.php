@@ -32,7 +32,7 @@ $this->registerJs($script, yii\web\View::POS_READY);
 
 <div class="row">
     <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-md-6" id="request_content">
         <div class="text-center"><h3>Заявка</h3></div>
 
         <div>
@@ -49,7 +49,9 @@ $this->registerJs($script, yii\web\View::POS_READY);
             <br>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">Имя</span>
-                <input type="text" class="form-control" value="<?= $guest == null ? '' : Html::encode($guest->name) ?>" placeholder="Введите имя"
+                <input type="text" class="form-control"
+                       value="<?= $guest == null ? Html::encode($requestName) : Html::encode($guest->name) ?>"
+                       placeholder="Введите имя"
                        aria-describedby="basic-addon1" id="txt_name" onblur="txt_name_onBlur()">
             </div>
             <br>
@@ -65,43 +67,57 @@ $this->registerJs($script, yii\web\View::POS_READY);
                 <div class="col-md-7 col-xs-7">
                     <h4>Тип ключа:</h4>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="">Нет</label>
+                        <label><input type="radio" name="optradio"  id="type_0">Нет</label>
                     </div>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="">Карта ( Белая )</label>
+                        <label><input type="radio" name="optradio"  id="type_1">Карта ( Белая )</label>
                     </div>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="">Брелок (синий)</label>
+                        <label><input type="radio" name="optradio"  id="type_2">Брелок (синий)</label>
                     </div>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="">Брелок (17/18 - 70 лет)</label>
+                        <label><input type="radio" name="optradio"
+                            <?php if ($key != null) {
+                                if ($key->number >= 1 && $key->number <=1200){
+                                    echo 'checked';
+                                }
+                            }
+                            ?>
+                            id="type_3">Брелок (17/18 - 70 лет)</label>
                     </div>
                     <div class="radio">
-                        <label><input type="radio" name="optradio" value="">Брелок (18/19 - черный)</label>
+                        <label><input type="radio" name="optradio"
+                            <?php if ($key != null) {
+                                if ($key->number > 1200 && $key->number <=1900){
+                                    echo 'checked';
+                                }
+                            }
+                            ?>
+                            id="type_4">Брелок (18/19 - черный)</label>
                     </div>
                     <div class="checkbox">
-                        <label><input type="checkbox" value="">Браслет</label>
+                        <label><input type="checkbox" value="" id="ch_bracelet">Браслет</label>
                     </div>
                 </div>
                 <div class="col-md-5 col-xs-5">
                     <h4>Доступ:</h4>
                         <div class="radio">
-                            <label><input type="radio" name="optradio1">Максимум</label>
+                            <label><input type="radio" name="optradio1" id="access_0">Максимум</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio1">М - штаб</label>
+                            <label><input type="radio" name="optradio1" id="access_1">М - штаб</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio1">М - Трактор</label>
+                            <label><input type="radio" name="optradio1" id="access_2">М - Трактор</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio1" checked>Осн.</label>
+                            <label><input type="radio" name="optradio1" id="access_3">Осн.</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="optradio1">Осн. + ложи</label>
+                            <label><input type="radio" name="optradio1" id="access_4">Осн. + ложи</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox">VIP</label>
+                            <label><input type="checkbox" id="ch_vip">VIP</label>
                         </div>
                 </div>
             </div>
@@ -139,7 +155,7 @@ $this->registerJs($script, yii\web\View::POS_READY);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                    <a href="#" type="button" class="btn btn-primary">Отправить заявку</a>
+                    <button type="button" class="btn btn-primary" onclick="modal_sendRequest()">Отправить заявку</button>
                 </div>
             </div>
         </div>
