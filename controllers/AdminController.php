@@ -249,6 +249,10 @@ class AdminController extends \yii\web\Controller
 
                 if ($req->key != null){
                     $key = Key::findOne($req->key->id);
+
+                    $key->status = Key::STATUS_ISSUED;
+                    $key->save();
+
                     $guest = Guest::findOne($req->guest->id);
 
                     $guestKey = new GuestKey();
