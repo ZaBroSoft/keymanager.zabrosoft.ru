@@ -18,6 +18,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
             'authKey' => 'test100key',
             'accessToken' => '100-token',
         ],
+        // Не забудь добавить юзера в Request
     ];
 
 

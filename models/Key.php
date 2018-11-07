@@ -10,6 +10,10 @@ use Yii;
  * @property int $id
  * @property int $number
  * @property int $status
+ * @property int $old_status
+ *
+ * @property GuestKey[] $guestKeys
+ * @property Request[] $requests
  */
 class Key extends \yii\db\ActiveRecord
 {
@@ -17,7 +21,7 @@ class Key extends \yii\db\ActiveRecord
     const STATUS_ISSUED = 20;
     const RESULT_RESERVE = 30;
     const RESULT_STOCK = 40;
-
+    const RESULT_INREQUEST = 50;
     /**
      * {@inheritdoc}
      */
@@ -33,7 +37,7 @@ class Key extends \yii\db\ActiveRecord
     {
         return [
             [['number'], 'required'],
-            [['number', 'status'], 'integer'],
+            [['number', 'status', 'old_status'], 'integer'],
             [['number'], 'unique'],
         ];
     }
@@ -47,17 +51,35 @@ class Key extends \yii\db\ActiveRecord
             'id' => 'ID',
             'number' => 'Number',
             'status' => 'Status',
+            'old_status' => 'Old Status',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGuestKeys()
+    {
+        return $this->hasMany(GuestKey::className(), ['key_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRequests()
+    {
+        return $this->hasMany(Request::className(), ['key_id' => 'id']);
     }
 
     public function getKeyByNumber($number)
     {
-        return Key::find()->where(['number'=>$number])->one();
+        return Key::findOne(['number' => $number]);
     }
 
     public function getGuest()
     {
-        $guestKey = GuestKey::findOne(['key_id' => $this->id]);
-        return $guestKey != null ? $guestKey->guest : null;
+        $guestKey = GuestKey::findOne(['key_id'=>$this->id]);
+        if ($guestKey == null) return null;
+        return Guest::findOne($guestKey->guest_id);
     }
 }

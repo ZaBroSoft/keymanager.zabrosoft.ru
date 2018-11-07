@@ -14,6 +14,7 @@
         <div id="result">
 
         </div>
+        <br>
     </div>
     <div class="col-md-3"></div>
 </div>

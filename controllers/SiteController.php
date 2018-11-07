@@ -4,7 +4,9 @@ namespace app\controllers;
 
 use app\models\Guest;
 use app\models\Key;
+use app\models\Request;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -57,7 +59,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $requests = Request::find()->where(['user_id'=>Yii::$app->user->getId()])->orderBy(['id'=>SORT_DESC]);
+
+        $requestsCount = clone $requests;
+        $pages = new Pagination(['totalCount'=> $requestsCount->count(), 'pageSize'=>10]);
+
+        $models = $requests->offset($pages->offset)->limit($pages->limit)->all();
+
         return $this->render('index', [
+            'requests' => $models,
+            'pages' => $pages
         ]);
     }
 
