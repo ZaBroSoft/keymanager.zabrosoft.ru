@@ -17,11 +17,12 @@ use Yii;
  */
 class Key extends \yii\db\ActiveRecord
 {
-    const STATUS_FREE = 10;
-    const STATUS_ISSUED = 20;
-    const RESULT_RESERVE = 30;
-    const RESULT_STOCK = 40;
-    const RESULT_INREQUEST = 50;
+    const STATUS_FREE = 10; // у техника
+    const STATUS_ISSUED = 20; // выдан гостю
+    const STATUS_RESERVE = 30;  // в резерве
+    const STATUS_STOCK = 40; // у маркетолога
+    const STATUS_INREQUEST = 50; // в запросе
+    const STATUS_LOSS = 60; // Утрачен
     /**
      * {@inheritdoc}
      */

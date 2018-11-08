@@ -287,3 +287,96 @@ function addGuest(req_id) {
         }
     );
 }
+
+/* begin::admin/action-key */
+
+function action_key_getKey() {
+    var number = +document.getElementById('txt_action_key_number').value;
+    if (!isFinite(number) || number == '' || number == 0) {
+        alert('Не верный номер брелка');
+        return;
+    }
+
+    $.post("../site/search-by-key",
+        {
+            num: number
+        },
+        function (data) {
+            if (data.key_status == 40){
+                $('#result').html('<div class="alert alert-info" role="alert"><b>На складе.</b> ' +
+                    'Данный брелок находится у маркетолога</div>');
+            }
+            if (data.key_status == 0) {
+                $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка.</b> ' +
+                    'Такого ключа не существует</div>');
+            }
+            if (data.key_status == 20){
+
+                $('#result').html('' +
+                    '<div class="panel panel-success">' +
+                    '   <div class="panel-heading">' +
+                    '       <div class="row">' +
+                    '           <div class="col-md-8 col-xs-8">' +
+                    '               <h4>'+ data.guest.name +'</h4>' +
+                    '           </div>' +
+                    '           <div class="col-md-4 col-xs-4 text-right">' +
+                    '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
+                    '                   class="btn btn-primary">' +
+                    '                   <i class="glyphicon glyphicon-plus"></i>' +
+                    '               </a>' +
+                    '           </div>   ' +
+                    '       </div>' +
+                    '   </div>' +
+                    '   <div class="panel-body">' +
+                    '       <h4>Должность:</h4>' +
+                    '       <div class="well">'+ data.guest.post +'</div>' +
+                            addReturnButtons() +
+                    '   </div>' +
+                    '</div>');
+            }
+            if (data.key_status == 10) {
+                $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
+                    'Данный брелок находится у техника СКД</div>');
+            }
+            if (data.key_status == 50) {
+                $('#result').html('<div class="alert alert-warning" role="alert"><b>Занят.</b> ' +
+                    'Данный брелок находится в заявке на выдачу</div>');
+            }
+        });
+
+}
+
+function addReturnButtons() {
+    var html = '<div class="btn-group">' +
+        '           <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' +
+        '               Вернуть' +
+        '               <span class="caret"></span>' +
+        '           </button>' +
+        '           <ul class="dropdown-menu">' +
+        '               <li><button class="btn btn-link" onclick="action_key_return(10)">Технику</button></li>' +
+        '               <li><button class="btn btn-link" onclick="action_key_return(40)">Маркетологу</button></li>' +
+        '           </ul>' +
+        '       </div>';
+    return html;
+}
+
+function action_key_return(status) {
+    var number = +document.getElementById('txt_action_key_number').value;
+    if (!isFinite(number) || number == '' || number == 0) {
+        alert('Не верный номер брелка');
+        return;
+    }
+
+    $.post("../admin/action-key",
+        {
+            action: 'return',
+            from: status,
+            number: number
+        },
+        function (data) {
+
+        });
+
+}
+
+/* end::admin/action-key */

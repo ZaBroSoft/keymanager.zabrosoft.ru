@@ -27,6 +27,14 @@ $this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes
                     <dic class="col-md-2 col-xs-2 text-right"></dic>
                 </div>
             </a>
+            <a href="<?= \yii\helpers\Url::to(['action-key']) ?>" class="btn btn-default list-group-item">
+                <div class="row">
+                    <dic class="col-md-10 col-xs-10">
+                        Операции с брелками
+                    </dic>
+                    <dic class="col-md-2 col-xs-2 text-right"></dic>
+                </div>
+            </a>
             <a href="<?= \yii\helpers\Url::to(['free-key']) ?>" class="btn btn-default list-group-item">
                 <div class="row">
                     <dic class="col-md-10 col-xs-10">
