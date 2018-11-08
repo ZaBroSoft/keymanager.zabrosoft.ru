@@ -39,7 +39,7 @@ class HelloController extends Controller
         for ($i = 0; $i++<1900;){
             $key = new Key();
             $key->number = $i;
-            $key->status = Key::RESULT_STOCK;
+            $key->status = Key::STATUS_STOCK;
             $key->save();
         }
         echo 'Done'.PHP_EOL;

@@ -96,7 +96,7 @@ class KeyController extends \yii\web\Controller
             }else{
                 $req->link('key', $key);
                 $key->old_status = $key->status;
-                $key->status = Key::RESULT_INREQUEST;
+                $key->status = Key::STATUS_INREQUEST;
                 $key->save();
             }
 
@@ -126,4 +126,5 @@ class KeyController extends \yii\web\Controller
             ];
         }
     }
+
 }

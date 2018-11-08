@@ -15,6 +15,8 @@ use yii\helpers\Html;
 
 class AdminController extends \yii\web\Controller
 {
+    const ACTION_KEY_RETURN = 1;
+    const ACTION_KEY_LOSS = 2;
 
     public function behaviors()
     {
@@ -24,7 +26,7 @@ class AdminController extends \yii\web\Controller
                 'rules' => [
                     [
                         'actions' => ['index', 'addguest', 'give-key', 'getguests', 'free-key', 'add-free-key',
-                            'request-view', 'list-request', 'change-status'],
+                            'request-view', 'list-request', 'change-status', 'action-key'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function (){
@@ -81,7 +83,7 @@ class AdminController extends \yii\web\Controller
         [
             'model' => $model
         ]);
-    }
+    } /* Добавление гостя в базу */
 
     public function actionGiveKey()
     {
@@ -153,7 +155,7 @@ class AdminController extends \yii\web\Controller
 
         return $this->render('give', [
         ]);
-    }
+    } /* Назначение брелка гостю */
 
     public function actionGetguests()
     {
@@ -165,15 +167,9 @@ class AdminController extends \yii\web\Controller
 
             $guests = Guest::find()->select('id, name')->where(['like', 'name', $data])->orderBy('name')->all();
 
-//            $index = 0;
-//            $guests = [];
-//            foreach (Guest::find()->select('name')->where(['like', 'name', $data])->orderBy('name')->all() as $guest){
-//                $guests[$index++] = $guest->name;
-//            }
-
             return $guests;
         }
-    }
+    } /* Список гостей для поля с автозаполнением */
 
     public function actionFreeKey()
     {
@@ -193,7 +189,7 @@ class AdminController extends \yii\web\Controller
             'nextKey' => $nextKey,
             'keyCount' => $countKeys->count()
         ]);
-    }
+    } /* Список свободных брелков */
 
     public function actionAddFreeKey($key)
     {
@@ -206,7 +202,7 @@ class AdminController extends \yii\web\Controller
         $model->save();
 
         return $this->redirect(['free-key', 'next_key' => $model->number + 1]);
-    }
+    } /* Добавление свободных брелков */
 
     public function actionRequestView($id)
     {
@@ -214,7 +210,7 @@ class AdminController extends \yii\web\Controller
         return $this->render('request-view', [
             'request' => $req
         ]);
-    }
+    } /* Просмотр заявки на брелок */
 
     public function actionListRequest()
     {
@@ -228,7 +224,7 @@ class AdminController extends \yii\web\Controller
             'models' => $models,
             'pages' => $pages
         ]);
-    }
+    } /* Список заявок */
 
     public function actionChangeStatus($id, $status)
     {
@@ -283,5 +279,47 @@ class AdminController extends \yii\web\Controller
         $req->save();
 
         return $this->redirect(['request-view', 'id' => $id]);
-    }
+    } /* Изменение статуса заявки */
+
+    public function actionActionKey()
+    {
+
+        if (Yii::$app->request->isAjax){
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $number = Yii::$app->request->post('number');
+            $action = Yii::$app->request->post('action');
+            $from = Yii::$app->request->post('from');
+
+            if ($action == 'return'){
+                $key = Key::findOne($number);
+                if ($key != null){
+                    if ($from == Key::STATUS_FREE){
+                        $guestKey =GuestKey::findOne(['key_id' => $key->id]);
+                        if ($guestKey != null){
+                            $guestKey->delete();
+                        }
+                        $key->status = Key::STATUS_FREE;
+                        $key->save();
+                        return [
+                            'status' => 'OK'
+                        ];
+                    }
+                    if ($from == Key::STATUS_STOCK){
+                        $guestKey =GuestKey::findOne(['key_id' => $key->id]);
+                        if ($guestKey != null){
+                            $guestKey->delete();
+                        }
+                        $key->status = Key::STATUS_STOCK;
+                        $key->save();
+                        return [
+                            'status' => 'OK'
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $this->render('action-key');
+    }  /* Действие над брелками */
 }
