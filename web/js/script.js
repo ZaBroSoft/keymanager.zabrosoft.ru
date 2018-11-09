@@ -332,28 +332,32 @@ function action_key_getKey() {
                     'Такого ключа не существует</div>' + addLossButton());
             }
             if (data.key_status == 20 || data.key_status == 60){
-
-                $('#result').html('' +
-                    '<div class="panel panel-success">' +
-                    '   <div class="panel-heading">' +
-                    '       <div class="row">' +
-                    '           <div class="col-md-8 col-xs-8">' +
-                    '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
-                    '           </div>' +
-                    '           <div class="col-md-4 col-xs-4 text-right">' +
-                    '               <button onclick="action_key_loss_all_key_from_guest()"'+
-                    '                   class="btn btn-primary">' +
-                    '                   <i class="glyphicon glyphicon-minus"></i>' +
-                    '               </button>' +
-                    '           </div>   ' +
-                    '       </div>' +
-                    '   </div>' +
-                    '   <div class="panel-body">' +
-                    '       <h4>Должность:</h4>' +
-                    '       <div class="well">'+ data.guest.post +'</div>' +
-                            addReturnButtons() + addLossButton() +
-                    '   </div>' +
-                    '</div>');
+                if (data.guest != null){
+                    $('#result').html('' +
+                        '<div class="panel panel-success">' +
+                        '   <div class="panel-heading">' +
+                        '       <div class="row">' +
+                        '           <div class="col-md-8 col-xs-8">' +
+                        '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
+                        '           </div>' +
+                        '           <div class="col-md-4 col-xs-4 text-right">' +
+                        '               <button onclick="action_key_loss_all_key_from_guest()"'+
+                        '                   class="btn btn-primary">' +
+                        '                   <i class="glyphicon glyphicon-minus"></i>' +
+                        '               </button>' +
+                        '           </div>   ' +
+                        '       </div>' +
+                        '   </div>' +
+                        '   <div class="panel-body">' +
+                        '       <h4>Должность:</h4>' +
+                        '       <div class="well">'+ data.guest.post +'</div>' +
+                        addReturnButtons() + addLossButton() +
+                        '   </div>' +
+                        '</div>');
+                }else{
+                    $('#result').html('<div class="alert alert-info" role="alert"><b>Утрачен.</b> ' +
+                        'Данный брелок потеряли, сломали или еще что-то с ним сделали</div>' + addReturnButtons());
+                }
             }
             if (data.key_status == 10) {
                 $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
