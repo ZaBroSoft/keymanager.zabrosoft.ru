@@ -43,7 +43,7 @@ class KeyController extends \yii\web\Controller
 
             return [
                 'key_id' => $key->id,
-                'key_status' => $key->status
+                'key_status' => $key->status,
             ];
         }
     }

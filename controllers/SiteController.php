@@ -104,6 +104,7 @@ class SiteController extends Controller
                 'keys_count' => $key_count,
                 'guest' => $guest,
                 'keys' => $guest->keysArray,
+                'key_status_name' => $key->getStatusName()
             ];
         }
     }
