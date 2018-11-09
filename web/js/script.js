@@ -116,7 +116,7 @@ function searchByNumberKey(){
                         '</div>');
                 }else {
                     $('#result').html('<div class="alert alert-info" role="alert"><b>Утрачен.</b> ' +
-                        'Данный брелок потеряли, сломали или еще что-то с ним сделали</div>' + addReturnButtons());
+                        'Данный брелок потеряли, сломали или еще что-то с ним сделали</div>');
                 }
             }
             if (data.key_status == 10) {
