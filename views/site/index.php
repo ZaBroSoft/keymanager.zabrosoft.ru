@@ -54,6 +54,11 @@ $this->registerJs($script, yii\web\View::POS_READY);
             </thead>
             <tbody>
             <?php foreach ($requests as $request): ?>
+                <?php
+                    if ($request->status == \app\models\Request::STATUS_DONE || $request->status == \app\models\Request::STATUS_CANCELED){
+                        continue;
+                    }
+                ?>
                 <tr class="<?php
                     switch ($request->status){
                         case \app\models\Request::STATUS_SENDED:
