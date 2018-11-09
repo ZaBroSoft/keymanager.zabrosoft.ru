@@ -318,6 +318,37 @@ class AdminController extends \yii\web\Controller
                     }
                 }
             }
+            if ($action == 'loss'){
+                $key = Key::findOne($number);
+                if ($key != null){
+                    $key->status = Key::STATUS_LOSS;
+                    $key->save();
+                    return [
+                        'status' => 'OK'
+                    ];
+                }
+            }
+            if ($action == 'loss_all_key_from_guest'){
+                $key = Key::findOne($number);
+                if ($key != null){
+                    $guestKey = GuestKey::findOne(['key_id'=>$key->id]);
+                    if ($guestKey != null){
+                        $guest = Guest::findOne($guestKey->guest_id);
+                        if ($guest != null){
+                            $keysGuest = GuestKey::find()->where(['guest_id'=>$guest->id])->all();
+                            foreach ($keysGuest as $keyGuest){
+                                $lossKey = Key::findOne($keyGuest->key_id);
+                                $lossKey->status = Key::STATUS_LOSS;
+                                $lossKey->save();
+                            }
+                        }
+                    }
+                    return [
+                        'status' => 'OK'
+                    ];
+                }
+            }
+
         }
 
         return $this->render('action-key');

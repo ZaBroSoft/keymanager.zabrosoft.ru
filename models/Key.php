@@ -83,4 +83,31 @@ class Key extends \yii\db\ActiveRecord
         if ($guestKey == null) return null;
         return Guest::findOne($guestKey->guest_id);
     }
+
+    public function getStatusName()
+    {
+        switch ($this->status){
+            case Key::STATUS_FREE:
+                return 'У техника';
+                break;
+            case Key::STATUS_ISSUED:
+                return 'Выдан';
+                break;
+            case Key::STATUS_RESERVE:
+                return 'В резерве';
+                break;
+            case Key::STATUS_STOCK:
+                return 'У маркетолога';
+                break;
+            case Key::STATUS_INREQUEST:
+                return 'В запросе';
+                break;
+            case Key::STATUS_LOSS:
+                return 'Утрачен';
+                break;
+            default:
+                return 'Неизвестно';
+                break;
+        }
+    }
 }

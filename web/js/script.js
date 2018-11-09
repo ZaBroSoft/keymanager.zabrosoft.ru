@@ -15,8 +15,17 @@ function searchByNumberKey(){
                         '</div>' + addRequestButton());
                 }else {
                     var keys = '';
+                    var keys_count = 0;
+                    var loss_keys = '';
+                    var loss_keys_count = 0;
                     for(var i = 0; i < data.keys_count; i++){
-                        keys += '<b>#' + data.keys[i].number + ', </b>';
+                        if (data.keys[i].status == 60) {
+                            loss_keys_count++;
+                            loss_keys += '<strike>#' + data.keys[i].number + ', </strike>';
+                        }else{
+                            keys += '<b>#' + data.keys[i].number + ', </b>';
+                            keys_count++;
+                        }
                     }
                     $('#result').html('' +
                         '<div class="panel panel-success">' +
@@ -33,14 +42,15 @@ function searchByNumberKey(){
                         '               </a>' +
                         '           </div>   ' +
                         '       </div>' +
-
                         '   </div>' +
                         '   <div class="panel-body">' +
                         '       <h4>Должность:</h4>' +
                         '       <div class="well">'+ data.guest.post +'</div>' +
-                        '       <h4>Ключи: <span class="badge">'+ data.keys_count +'</span></h4>' +
+                        '       <h4>Всего ключей:<span class="badge">'+ data.keys_count +'</span>' +
+                        '            Активных: <span class="badge">'+ keys_count +'</span>' +
+                        '               Утраченых: <span class="badge">'+ loss_keys_count +'</span></h4>' +
                         '       <div class="well">' +
-                        '       '+ keys +'' +
+                        '       '+ keys +'' + loss_keys +
                         '       </div>' +
                         '   </div>' +
                         '</div>');
@@ -62,17 +72,26 @@ function searchByNumberKey(){
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка.</b> ' +
                     'Такого ключа не существует</div>');
             }
-            if (data.key_status == 20){
+            if (data.key_status == 20 || data.key_status == 60){
                 var keys = '';
+                var keys_count = 0;
+                var loss_keys = '';
+                var loss_keys_count = 0;
                 for(var i = 0; i < data.keys_count; i++){
-                    keys += '<b>#' + data.keys[i].number + ', </b>';
+                    if (data.keys[i].status == 60) {
+                        loss_keys_count++;
+                        loss_keys += '<b>#' + data.keys[i].number + ', </b>';
+                    }else{
+                        keys += '<b>#' + data.keys[i].number + ', </b>';
+                        keys_count++;
+                    }
                 }
                 $('#result').html('' +
                     '<div class="panel panel-success">' +
                     '   <div class="panel-heading">' +
                     '       <div class="row">' +
                     '           <div class="col-md-8 col-xs-8">' +
-                    '               <h4>'+ data.guest.name +'</h4>' +
+                    '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
                     '           </div>' +
                     '           <div class="col-md-4 col-xs-4 text-right">' +
                     '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
@@ -85,7 +104,9 @@ function searchByNumberKey(){
                     '   <div class="panel-body">' +
                     '       <h4>Должность:</h4>' +
                     '       <div class="well">'+ data.guest.post +'</div>' +
-                    '       <h4>Ключи: <span class="badge">'+ data.keys_count +'</span></h4>' +
+                    '       <h4>Всего ключей:<span class="badge">'+ data.keys_count +'</span>' +
+                    '            Активных: <span class="badge">'+ keys_count +'</span>' +
+                    '               Утраченых: <span class="badge">'+ loss_keys_count +'</span></h4>' +
                     '       <div class="well">' +
                     '       '+ keys +'' +
                     '       </div>' +
@@ -304,39 +325,39 @@ function action_key_getKey() {
         function (data) {
             if (data.key_status == 40){
                 $('#result').html('<div class="alert alert-info" role="alert"><b>На складе.</b> ' +
-                    'Данный брелок находится у маркетолога</div>');
+                    'Данный брелок находится у маркетолога</div>' + addLossButton());
             }
             if (data.key_status == 0) {
                 $('#result').html('<div class="alert alert-danger" role="alert"><b>Ошибка.</b> ' +
-                    'Такого ключа не существует</div>');
+                    'Такого ключа не существует</div>' + addLossButton());
             }
-            if (data.key_status == 20){
+            if (data.key_status == 20 || data.key_status == 60){
 
                 $('#result').html('' +
                     '<div class="panel panel-success">' +
                     '   <div class="panel-heading">' +
                     '       <div class="row">' +
                     '           <div class="col-md-8 col-xs-8">' +
-                    '               <h4>'+ data.guest.name +'</h4>' +
+                    '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
                     '           </div>' +
                     '           <div class="col-md-4 col-xs-4 text-right">' +
-                    '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
+                    '               <button onclick="action_key_loss_all_key_from_guest()"'+
                     '                   class="btn btn-primary">' +
-                    '                   <i class="glyphicon glyphicon-plus"></i>' +
-                    '               </a>' +
+                    '                   <i class="glyphicon glyphicon-minus"></i>' +
+                    '               </button>' +
                     '           </div>   ' +
                     '       </div>' +
                     '   </div>' +
                     '   <div class="panel-body">' +
                     '       <h4>Должность:</h4>' +
                     '       <div class="well">'+ data.guest.post +'</div>' +
-                            addReturnButtons() +
+                            addReturnButtons() + addLossButton() +
                     '   </div>' +
                     '</div>');
             }
             if (data.key_status == 10) {
                 $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
-                    'Данный брелок находится у техника СКД</div>');
+                    'Данный брелок находится у техника СКД</div>' + addLossButton());
             }
             if (data.key_status == 50) {
                 $('#result').html('<div class="alert alert-warning" role="alert"><b>Занят.</b> ' +
@@ -360,6 +381,28 @@ function addReturnButtons() {
     return html;
 }
 
+function addLossButton() {
+    var html = '<button class="btn btn-danger" onclick="action_key_loss()">Утрачен</button>';
+    return html;
+}
+
+function action_key_loss() {
+    var number = +document.getElementById('txt_action_key_number').value;
+    if (!isFinite(number) || number == '' || number == 0) {
+        alert('Не верный номер брелка');
+        return;
+    }
+
+    $.post("../admin/action-key",
+        {
+            action: 'loss',
+            number: number
+        },
+        function (data) {
+            action_key_getKey();
+        });
+}
+
 function action_key_return(status) {
     var number = +document.getElementById('txt_action_key_number').value;
     if (!isFinite(number) || number == '' || number == 0) {
@@ -374,9 +417,26 @@ function action_key_return(status) {
             number: number
         },
         function (data) {
-
+            action_key_getKey();
         });
 
+}
+
+function action_key_loss_all_key_from_guest() {
+    var number = +document.getElementById('txt_action_key_number').value;
+    if (!isFinite(number) || number == '' || number == 0) {
+        alert('Не верный номер брелка');
+        return;
+    }
+
+    $.post("../admin/action-key",
+        {
+            action: 'loss_all_key_from_guest',
+            number: number
+        },
+        function (data) {
+            action_key_getKey();
+        });
 }
 
 /* end::admin/action-key */
