@@ -73,45 +73,51 @@ function searchByNumberKey(){
                     'Такого ключа не существует</div>');
             }
             if (data.key_status == 20 || data.key_status == 60){
-                var keys = '';
-                var keys_count = 0;
-                var loss_keys = '';
-                var loss_keys_count = 0;
-                for(var i = 0; i < data.keys_count; i++){
-                    if (data.keys[i].status == 60) {
-                        loss_keys_count++;
-                        loss_keys += '<b>#' + data.keys[i].number + ', </b>';
-                    }else{
-                        keys += '<b>#' + data.keys[i].number + ', </b>';
-                        keys_count++;
+                if (data.guest != null){
+                    var keys = '';
+                    var keys_count = 0;
+                    var loss_keys = '';
+                    var loss_keys_count = 0;
+                    for(var i = 0; i < data.keys_count; i++){
+                        if (data.keys[i].status == 60) {
+                            loss_keys_count++;
+                            loss_keys += '<b>#' + data.keys[i].number + ', </b>';
+                        }else{
+                            keys += '<b>#' + data.keys[i].number + ', </b>';
+                            keys_count++;
+                        }
                     }
+
+                    $('#result').html('' +
+                        '<div class="panel panel-success">' +
+                        '   <div class="panel-heading">' +
+                        '       <div class="row">' +
+                        '           <div class="col-md-8 col-xs-8">' +
+                        '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
+                        '           </div>' +
+                        '           <div class="col-md-4 col-xs-4 text-right">' +
+                        '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
+                        '                   class="btn btn-primary">' +
+                        '                   <i class="glyphicon glyphicon-plus"></i>' +
+                        '               </a>' +
+                        '           </div>   ' +
+                        '       </div>' +
+                        '   </div>' +
+                        '   <div class="panel-body">' +
+                        '       <h4>Должность:</h4>' +
+                        '       <div class="well">'+ data.guest.post +'</div>' +
+                        '       <h4>Всего ключей:<span class="badge">'+ data.keys_count +'</span>' +
+                        '            Активных: <span class="badge">'+ keys_count +'</span>' +
+                        '               Утраченых: <span class="badge">'+ loss_keys_count +'</span></h4>' +
+                        '       <div class="well">' +
+                        '       '+ keys +'' +
+                        '       </div>' +
+                        '   </div>' +
+                        '</div>');
+                }else {
+                    $('#result').html('<div class="alert alert-info" role="alert"><b>Утрачен.</b> ' +
+                        'Данный брелок потеряли, сломали или еще что-то с ним сделали</div>' + addReturnButtons());
                 }
-                $('#result').html('' +
-                    '<div class="panel panel-success">' +
-                    '   <div class="panel-heading">' +
-                    '       <div class="row">' +
-                    '           <div class="col-md-8 col-xs-8">' +
-                    '               <h4>'+ data.guest.name +'<span class="label label-primary">'+ data.key_status_name +'</span></h4>' +
-                    '           </div>' +
-                    '           <div class="col-md-4 col-xs-4 text-right">' +
-                    '               <a href="key/request-key?number=&name='+ data.guest.name +'"'+
-                    '                   class="btn btn-primary">' +
-                    '                   <i class="glyphicon glyphicon-plus"></i>' +
-                    '               </a>' +
-                    '           </div>   ' +
-                    '       </div>' +
-                    '   </div>' +
-                    '   <div class="panel-body">' +
-                    '       <h4>Должность:</h4>' +
-                    '       <div class="well">'+ data.guest.post +'</div>' +
-                    '       <h4>Всего ключей:<span class="badge">'+ data.keys_count +'</span>' +
-                    '            Активных: <span class="badge">'+ keys_count +'</span>' +
-                    '               Утраченых: <span class="badge">'+ loss_keys_count +'</span></h4>' +
-                    '       <div class="well">' +
-                    '       '+ keys +'' +
-                    '       </div>' +
-                    '   </div>' +
-                    '</div>');
             }
             if (data.key_status == 10) {
                 $('#result').html('<div class="alert alert-success" role="alert"><b>Свободен.</b> ' +
