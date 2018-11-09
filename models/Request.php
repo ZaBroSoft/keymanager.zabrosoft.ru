@@ -124,6 +124,24 @@ class Request extends \yii\db\ActiveRecord
                     'accessToken' => '100-token',
                 ];
                 break;
+            case 101:
+                return [
+                    'id' => '101',
+                    'username' => 'mshkola',
+                    'password' => 'traktor74',
+                    'authKey' => 'test101key',
+                    'accessToken' => '101-token',
+                ];
+                break;
+            case 102:
+                return [
+                    'id' => '102',
+                    'username' => 'director',
+                    'password' => 'arena74',
+                    'authKey' => 'test102key',
+                    'accessToken' => '102-token',
+                ];
+                break;
         }
     }
 
