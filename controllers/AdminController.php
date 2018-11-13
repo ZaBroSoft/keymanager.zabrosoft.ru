@@ -25,13 +25,18 @@ class AdminController extends \yii\web\Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'addguest', 'give-key', 'getguests', 'free-key', 'add-free-key',
+                        'actions' => ['index', 'addguest', 'give-key', 'free-key', 'add-free-key',
                             'request-view', 'list-request', 'change-status', 'action-key'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function (){
                             return \Yii::$app->user->getId() == 100;
                         }
+                    ],
+                    [
+                        'actions' => ['getguests'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                 ],
             ],
@@ -217,7 +222,7 @@ class AdminController extends \yii\web\Controller
         $list = Request::find()->orderBy(['(id)' => SORT_DESC]);
 
         $listCount = clone $list;
-        $pages = new Pagination(['totalCount' => $listCount->count(), 'pageSize' => 15]);
+        $pages = new Pagination(['totalCount' => $listCount->count(), 'pageSize' => 10]);
         $models = $list->offset($pages->offset)->limit($pages->limit)->all();
 
         return $this->render('list-request', [
