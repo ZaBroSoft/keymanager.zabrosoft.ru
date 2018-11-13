@@ -1,8 +1,5 @@
 <?php
 
-$this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js');
-$this->registerCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css');
-
 $script = <<< JS
     $("#txt_number_key").autocomplete({
         source: function(request, response){
