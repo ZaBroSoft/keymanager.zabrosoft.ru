@@ -60,7 +60,7 @@ function searchByNumberKey(){
         return;
     }
     $.ajax({
-        url: 'site/search-by-key',
+        url: '../site/search-by-key',
         type: 'post',
         data: {num: number},
         success: function (data) {
@@ -87,7 +87,6 @@ function searchByNumberKey(){
                             keys_count++;
                         }
                     }
-
                     $('#result').html('' +
                         '<div class="panel panel-success">' +
                         '   <div class="panel-heading">' +
