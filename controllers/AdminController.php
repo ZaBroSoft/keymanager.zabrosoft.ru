@@ -18,6 +18,8 @@ class AdminController extends \yii\web\Controller
     const ACTION_KEY_RETURN = 1;
     const ACTION_KEY_LOSS = 2;
 
+    public $layout = '@app/views/admin/admin-layout';
+
     public function behaviors()
     {
         return [

@@ -114,7 +114,7 @@ class Request extends \yii\db\ActiveRecord
 
     public function getUser()
     {
-        switch (Yii::$app->user->getId()){
+        switch ($this->user_id){
             case 100:
                 return [
                     'id' => '100',
