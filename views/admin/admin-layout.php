@@ -44,19 +44,19 @@ AppAsset::register($this);
             <div class="navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
                 <ul class="nav navbar-nav">
                     <li>
-                    <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class=""> Добавить гостя </a>
+                        <a href="<?= \yii\helpers\Url::to(['addguest']) ?>" class=""> Добавить гостя </a>
                     </li>
                     <li>
-                    <a href="<?= \yii\helpers\Url::to(['give-key']) ?>" class=""> Выдать брелок </a>
+                        <a href="<?= \yii\helpers\Url::to(['give-key']) ?>" class=""> Выдать брелок </a>
                     </li>
                     <li>
-                    <a href="<?= \yii\helpers\Url::to(['action-key']) ?>" class=""> Операции с брелками </a>
+                        <a href="<?= \yii\helpers\Url::to(['action-key']) ?>" class=""> Операции с брелками </a>
                     </li>
                     <li>
-                    <a href="<?= \yii\helpers\Url::to(['free-key']) ?>" class=""> Свободные брелки </a>
+                        <a href="<?= \yii\helpers\Url::to(['free-key']) ?>" class=""> Свободные брелки </a>
                     </li>
                     <li>
-                    <a href="<?= \yii\helpers\Url::to(['list-request']) ?>" class=""> Заявки </a>
+                        <a href="<?= \yii\helpers\Url::to(['list-request']) ?>" class=""> Заявки </a>
                     </li>
                     <li>
                         <a href="<?= \yii\helpers\Url::to(['../site/index']) ?>" class=""> На главную </a>
@@ -67,11 +67,11 @@ AppAsset::register($this);
         </div>
     </nav>
 
-    <div class="container">
+
 
         <?= $content ?>
 
-    </div>
+
 </div>
 
 <footer class="footer">

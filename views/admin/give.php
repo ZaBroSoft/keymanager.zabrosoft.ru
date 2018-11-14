@@ -24,20 +24,20 @@ $this->registerJs($script, yii\web\View::POS_READY);
         <br>
         <div id="result"></div>
         <br>
-        <div class="input-group input-group-lg">
+        <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Ключ</span>
             <input type="text" class="form-control" placeholder="Введите номер ключа"
                    aria-describedby="basic-addon1" id="txt_number_key">
         </div>
         <br>
-        <div class="input-group input-group-lg">
+        <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Имя</span>
             <input type="text" class="form-control" placeholder="Введите имя"
                    aria-describedby="basic-addon1" id="txt_name">
         </div>
         <br>
         <h4>Должность:</h4>
-        <div class="input-group input-group-lg">
+        <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">
                 <input type="checkbox" aria-label="" id="ch_newGuest">
             </span>
@@ -45,7 +45,7 @@ $this->registerJs($script, yii\web\View::POS_READY);
                    aria-describedby="basic-addon1" id="txt_post">
         </div>
         <br>
-        <button type="button" class="btn btn-primary btn-block btn-lg" onclick="giveKey()">Выдать</button>
+        <button type="button" class="btn btn-primary btn-block" onclick="giveKey()">Выдать</button>
     </div>
     <div class="col-md-3"></div>
 </div>
